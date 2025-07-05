@@ -1,0 +1,4 @@
+D:/my-github/dzharii_cpp-20s-experiments/build-release/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/foo.dir
+D:/my-github/dzharii_cpp-20s-experiments/build-release/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/boo.dir
+D:/my-github/dzharii_cpp-20s-experiments/build-release/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/ALL_BUILD.dir
+D:/my-github/dzharii_cpp-20s-experiments/build-release/CMakeFiles/_CMakeLTOTest-CXX/bin/CMakeFiles/ZERO_CHECK.dir

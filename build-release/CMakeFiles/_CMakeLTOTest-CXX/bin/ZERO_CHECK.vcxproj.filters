@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\my-github\dzharii_cpp-20s-experiments\build-release\CMakeFiles\_CMakeLTOTest-CXX\bin\CMakeFiles\0841fcc2720254705d70bbf0a1ad3aac\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{46FABB06-EBBD-3266-9E59-20892D9A10E2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

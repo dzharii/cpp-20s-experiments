@@ -1,0 +1,10 @@
+^D:\MY-GITHUB\DZHARII_CPP-20S-EXPERIMENTS\CMAKELISTS.TXT
+setlocal
+C:\Home\cpp-dev\CMake\bin\cmake.exe -SD:/my-github/dzharii_cpp-20s-experiments -BD:/my-github/dzharii_cpp-20s-experiments/build-release --check-stamp-file D:/my-github/dzharii_cpp-20s-experiments/build-release/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
