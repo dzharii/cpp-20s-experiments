@@ -40,6 +40,17 @@ set(MAIN_APP_UI cpp-20s-experiments) # Main application
 #                            Build! (Change as needed)
 # --------------------------------------------------------------------------------
 
+## AwwLib
+
+FetchContent_Declare(
+    awwlib
+    GIT_REPOSITORY https://github.com/dzharii/awwlib-cpp.git
+    GIT_TAG        main
+    GIT_SHALLOW TRUE
+)
+
+FetchContent_MakeAvailable(awwlib)
+
 
 
 
@@ -58,6 +69,7 @@ add_executable(${MAIN_APP_UI} app/main.cpp)   # Name of exec. and location of fi
 # target_sources(${MAIN_APP_UI} PRIVATE ${MAIN_APP_UI_SOURCE})
 
 target_link_libraries(${MAIN_APP_UI} PRIVATE
+    awwlib
 )  # Link the executable to library (if it uses it).
 target_set_warnings(${MAIN_APP_UI} ENABLE ALL AS_ERROR ALL DISABLE Annoying) # Set warnings (if needed).
 target_enable_lto(${MAIN_APP_UI} optimized)  # enable link-time-optimization if available for non-debug configurations
