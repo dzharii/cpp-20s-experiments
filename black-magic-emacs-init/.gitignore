@@ -1,0 +1,6 @@
+**/*
+!.gitignore
+!init.el
+!init-config.org
+!theme-background
+!theme-background/background-star-01.svg

@@ -1,0 +1,237 @@
+#+TITLE: Emacs Configuration
+#+PROPERTY: header-args :tangle yes :noweb yes :eval never-export
+
+* Character Encoding defaults to UTF-8
+#+begin_src emacs-lisp
+;; ensure UTF-8 everywhere
+(prefer-coding-system 'utf-8)
+(set-language-environment "UTF-8")
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(setq locale-coding-system 'utf-8)
+(set-selection-coding-system 'utf-8)
+(setq default-buffer-file-coding-system 'utf-8)
+#+end_src
+
+* Autosave settings
+#+begin_src emacs-lisp
+  (setq auto-save-file-name-transforms
+	`((".*" ,(concat user-emacs-directory "auto-save/") t)))
+  
+  (setq backup-directory-alist
+	`(("." . ,(expand-file-name
+		   (concat user-emacs-directory "backups")))))
+#+end_src
+
+* Org Babel Configuration enables loading this file as init
+#+begin_src emacs-lisp
+(require 'org)
+(require 'ob-tangle)
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)))
+#+end_src
+
+* Black Magic Theme Definition blends ritual flair with a dark palette
+#+begin_src emacs-lisp
+  (add-to-list 'custom-theme-load-path
+             (expand-file-name "themes" user-emacs-directory))
+#+end_src
+
+#+begin_src emacs-lisp
+(deftheme black-magic "Occult inspired dark theme blending ritual flair with popular dark palettes")
+(custom-theme-set-variables
+ 'black-magic
+ '(frame-background-mode 'dark))
+(custom-theme-set-faces
+ 'black-magic
+ ;; default face: charcoal instead of pure black
+ '(default               ((t (:background "#111111" :foreground "#B8860B"))))
+ ;; menu bar
+ '(menu                  ((t (:background "#8B0000" :foreground "#B8860B"))))
+ ;; active mode line
+ '(mode-line             ((t (:background "#8B0000" :foreground "#B8860B" :box nil))))
+ ;; inactive mode line
+ '(mode-line-inactive    ((t (:background "#1a0000" :foreground "#7f4500" :box nil))))
+ ;; cursor
+ '(cursor                ((t (:background "#8B0000"))))
+ ;; region selection
+ '(region                ((t (:background "#330000"))))
+ ;; fringe
+ '(fringe                ((t (:background "#0a0000"))))
+ ;; line numbers
+ '(line-number           ((t (:foreground "#3a0000" :background "#0a0000"))))
+ '(line-number-current-line ((t (:foreground "#8B0000" :background "#1a0000"))))
+ ;; comments
+ '(font-lock-comment-face    ((t (:foreground "#6272A4" :slant italic))))
+ ;; strings
+ '(font-lock-string-face     ((t (:foreground "#FF4500"))))
+ ;; keywords
+ '(font-lock-keyword-face    ((t (:foreground "#B8860B" :weight bold))))
+ ;; function names
+ '(font-lock-function-name-face ((t (:foreground "#8B0000"))))
+ ;; variable names
+ '(font-lock-variable-name-face ((t (:foreground "#D2691E"))))
+ ;; org document title
+ '(org-document-title      ((t (:foreground "#B8860B" :height 1.5 :weight bold))))
+ ;; org headings
+ '(org-level-1             ((t (:foreground "#B8860B" :weight bold))))
+ '(org-level-2             ((t (:foreground "#8B0000"))))
+ ;; org blocks
+ '(org-block               ((t (:background "#1a0000"))))
+ ;; helm selection
+ '(helm-selection          ((t (:background "#330000" :foreground "#B8860B"))))
+ ;; ivy current match
+ '(ivy-current-match       ((t (:background "#330000" :foreground "#B8860B"))))
+ ;; company tooltip
+ '(company-tooltip         ((t (:background "#1a0000" :foreground "#B8860B"))))
+ '(company-tooltip-selection ((t (:background "#330000" :foreground "#FF4500"))))
+ '(company-tooltip-common  ((t (:foreground "#B8860B" :weight bold)))))
+(provide-theme 'black-magic)
+#+end_src
+
+#+begin_src emacs-lisp
+;; load theme early for dark UI on startup
+(enable-theme 'black-magic)
+#+end_src
+
+* UI and Behavior Enhancements loads theme and related packages with candlelight effect
+#+begin_src emacs-lisp
+;; hide the usual startup screen
+(setq inhibit-startup-screen t)
+
+;; show SVG splash in scratch buffer
+(let* ((base-dir  (file-name-directory (or load-file-name buffer-file-name)))
+       ;; point to theme-background folder
+       (svg-file  (expand-file-name "theme-background/background-star-01.svg" base-dir)))
+  (when (file-readable-p svg-file)
+    (setq initial-scratch-message
+          (format "#+STARTUP: inlineimages\n[[file:%s]]" svg-file))
+    (add-hook 'emacs-startup-hook
+              (lambda ()
+                (with-current-buffer "*scratch*"
+                  (org-mode)
+                  (org-display-inline-images))))))
+#+end_src
+
+
+* Package Management and Basic Configuration ensures package archives and use-package
+
+~radian-software/straight.el~
+Next-generation, purely functional package manager for the Emacs hacker.
+
+https://github.com/radian-software/straight.el?tab=readme-ov-file#what-happens-when-i-call-straight-use-package
+
+#+begin_src emacs-lisp
+  (defvar bootstrap-version)
+  (let ((bootstrap-file
+	 (expand-file-name
+	  "straight/repos/straight.el/bootstrap.el"
+	  (or (bound-and-true-p straight-base-dir)
+	      user-emacs-directory)))
+	(bootstrap-version 7))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+	  (url-retrieve-synchronously
+	   "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+	   'silent 'inhibit-cookies)
+	(goto-char (point-max))
+	(eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage))
+#+end_src
+
+
+#+begin_src emacs-lisp
+(require 'package)
+(setq package-archives
+      '(("melpa" . "https://melpa.org/packages/")
+        ("gnu"   . "https://elpa.gnu.org/packages/")))
+(package-initialize)
+(unless package-archive-contents
+  (package-refresh-contents))
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+(require 'use-package)
+(setq use-package-always-ensure t)
+#+end_src
+
+#+begin_src emacs-lisp
+  ;; (enable-theme 'black-magic)  ; removed, already loaded above
+  (use-package moody
+    :config
+    (moody-replace-mode-line-buffer-identification))
+
+  (use-package all-the-icons
+    :if (display-graphic-p))
+
+  (use-package helm
+    :config
+    (helm-mode 1))
+
+  (use-package company
+    :config
+    (global-company-mode))
+
+  (run-with-timer 0 5
+    (lambda ()
+      (when (bound-and-true-p mode-line-format)
+	(set-face-attribute 'mode-line nil
+			    :background
+			    (if (zerop (random 2))
+				"#8B0000"
+				"#7A0000")))))
+
+
+#+end_src
+
+https://github.com/karthink/gptel
+
+#+begin_src emacs-lisp
+  (straight-use-package 'gptel)
+  (use-package gptel
+  :straight t
+  :if (display-graphic-p)
+  :init
+  ;; fetch OpenAI key from env or auth-source
+  (setq gptel-api-key
+        (or (getenv "OPENAI_API_KEY")
+            (gptel-api-key-from-auth-source)))
+  ;; set default model
+  (setq gptel-model 'gpt-4.1) 
+  :config
+  ;; enable gptel in all buffers
+  (add-hook 'after-init-hook #'gptel-mode)
+  ;; optional: bind a key for sending prompts
+  (define-key gptel-mode-map (kbd "C-c g") #'gptel-send))
+
+#+end_src
+
+
+* Usability Enhancements
+#+begin_src emacs-lisp
+;; Smooth scrolling
+(setq scroll-conservatively 100
+      scroll-margin 2
+      scroll-step 1
+      scroll-preserve-screen-position t)
+
+;; Increase default font size to 14pt in GUI
+(when (display-graphic-p)
+  ;; height is in 1/10 pt, so 14pt → 140
+  (set-face-attribute 'default nil :height 140))
+#+end_src
+
+* Convenience Commands
+#+begin_src emacs-lisp
+(defun summon-reload-config ()
+  "Reload Emacs init configuration (init.el)."
+  (interactive)
+  (load-file user-init-file)
+  (message "Emacs configuration reloaded."))
+
+(defun summon-open-config ()
+  "Open the current Emacs init file for editing."
+  (interactive)
+  (find-file user-init-file))
+#+end_src
