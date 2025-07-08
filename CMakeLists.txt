@@ -52,6 +52,16 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(awwlib)
 
+## Google Benchmark
+FetchContent_Declare(
+    benchmark
+    GIT_REPOSITORY https://github.com/google/benchmark.git
+    GIT_TAG        v1.9.4
+    GIT_SHALLOW TRUE
+)
+set(BENCHMARK_ENABLE_TESTING OFF)
+FetchContent_MakeAvailable(benchmark)
+
 
 # target_compile_options(${LIBRARY_NAME} ... )  # For setting manually.
 
@@ -77,11 +87,17 @@ else()
 # Nothing yet
 endif()
 
+# Add benchmark executable
+add_executable(hello_benchmark app/hello_benchmark.cpp)
+target_link_libraries(hello_benchmark PRIVATE benchmark::benchmark)
+target_set_warnings(hello_benchmark ENABLE ALL AS_ERROR ALL DISABLE Annoying)
+target_enable_lto(hello_benchmark optimized)
 
 
 # Set the properties you require, e.g. what C++ standard to use. Here applied to library and main (change as needed).
 set(PROJECTS
     ${MAIN_APP_UI}
+    hello_benchmark
 )
 
 set_target_properties(
