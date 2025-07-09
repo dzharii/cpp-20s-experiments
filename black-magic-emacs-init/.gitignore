@@ -2,5 +2,7 @@
 !.gitignore
 !init.el
 !init-config.org
+!init-dired
+!init-dired/init-dired.org
 !theme-background
 !theme-background/background-star-01.svg

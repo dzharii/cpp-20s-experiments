@@ -1,0 +1,27 @@
+* Dired Configuration
+
+This file contains settings for Dired, the Emacs directory editor.
+
+** Sorting
+
+List directories first, then files, both sorted alphabetically.
+
+#+begin_src emacs-lisp
+(setq dired-listing-switches "-al --group-directories-first")
+#+end_src
+
+** Dotfiles First
+
+Sort dotfiles before other files alphabetically.
+
+#+begin_src emacs-lisp
+(defun my-dired-sort-dotfiles-first (orig-fun &rest args)
+  "Sort dotfiles before other files in Dired."
+  (let* ((records (apply orig-fun args))
+         (dotfiles (cl-remove-if-not (lambda (rec) (string-prefix-p "." (car rec))) records))
+         (other-files (cl-remove-if (lambda (rec) (string-prefix-p "." (car rec))) records)))
+    (append (sort dotfiles (lambda (a b) (string-lessp (car a) (car b))))
+            (sort other-files (lambda (a b) (string-lessp (car a) (car b)))))))
+
+(advice-add 'dired-read-dir-records :around #'my-dired-sort-dotfiles-first)
+#+end_src
