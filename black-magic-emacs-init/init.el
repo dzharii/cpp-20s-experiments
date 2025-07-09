@@ -1,7 +1,11 @@
 ﻿;; REAL INIT:
 (setq package-enable-at-startup nil) ;; radian-software/straight.el
 (require 'org)
+;; Main configuration file, load first
 (org-babel-load-file (expand-file-name "./black-magic-emacs-init/init-config.org"))
+
+;; [dired] Emacs DirectoryEditor specific configuration 
+(org-babel-load-file (expand-file-name "./black-magic-emacs-init/init-dired/init-dired.org"))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

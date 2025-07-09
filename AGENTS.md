@@ -187,3 +187,24 @@ The benchmark executables will be located in the same `bin` directory (e.g., `bu
 ## 6. Code Style
 
 This project uses `.clang-format` to enforce a consistent code style. Please format your code before committing.
+
+## Emacs specific configuration
+
+When I ask to tweak something in Emacs, you should be aware that I keep a special Emacs configuration in `black-magic-emacs-init`.
+To understand how it works, start with `init.el`. This file contains helpful comments and references.
+It's important to understand the modular configuration: from `init.el`, the file `init-config.org` is referenced. This file tangles to `init-config.el` when Emacs runs, but you should always edit the `.org` file, since this is the source, when I request changes.
+Another example is:
+
+```emacs-lisp
+;; [dired] Emacs Directory Editor specific configuration 
+(org-babel-load-file (expand-file-name "./black-magic-emacs-init/init-dired/init-dired.org"))
+```
+
+Here, I’m loading a specific part of the configuration for a specific part of Emacs. I’d like to keep this modular approach, and when I ask to tweak something in a specific module, find the existing file or create a new one.
+Remember: we always make edits in `.org` files when it comes to Emacs configuration.
+
+Do not run these files, but you can examine the source code:
+* `summon-emacs.cmd`
+* `summon-emacs.ps1`
+
+
